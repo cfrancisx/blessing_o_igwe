@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Val?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #fff5f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        /* Animated gradient background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ffc2d1, #ff8fa3, #fb6f92, #ffb3c6);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Hearts decoration */
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .heart:nth-child(2n) {
+            color: rgba(255, 105, 180, 0.5);
+            animation-delay: -2s;
+        }
+        
+        .heart:nth-child(3n) {
+            color: rgba(255, 182, 193, 0.6);
+            animation-delay: -4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(20deg); }
+        }
+        
+        /* Main content container */
+        .container {
+            max-width: 800px;
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(188, 112, 152, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1;
+        }
+        
+        /* Romantic glow effect */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* Main text styling */
+        .main-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5.5rem;
+            color: #d63384;
+            margin-bottom: 50px;
+            text-shadow: 3px 3px 10px rgba(214, 51, 132, 0.2);
+            line-height: 1.2;
+            position: relative;
+            padding: 0 10px;
+        }
+        
+        .main-text::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #ff8fa3, transparent);
+        }
+        
+        /* Button container */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        /* Button styling */
+        .btn {
+            padding: 18px 45px;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            min-width: 160px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            border-radius: 50px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Yes button */
+        .btn-yes {
+            background: linear-gradient(to right, #ff4d6d, #ff8fa3);
+            color: white;
+        }
+        
+        .btn-yes:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(255, 77, 109, 0.3);
+            background: linear-gradient(to right, #ff8fa3, #ff4d6d);
+        }
+        
+        /* No button */
+        .btn-no {
+            background: linear-gradient(to right, #a5a5a5, #d1d1d1);
+            color: #333;
+        }
+        
+        .btn-no:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(165, 165, 165, 0.3);
+            background: linear-gradient(to right, #d1d1d1, #a5a5a5);
+        }
+        
+        /* Button icons */
+        .btn i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        /* Footer note */
+        .footer {
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: 4rem;
+            }
+            
+            .btn {
+                padding: 16px 35px;
+                font-size: 1.3rem;
+                min-width: 140px;
+            }
+            
+            .buttons {
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-text {
+                font-size: 3.2rem;
+            }
+            
+            .container {
+                padding: 25px 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+        
+        /* Animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        /* Pulse animation for yes button */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .btn-yes {
+            animation: pulse 3s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="background"></div>
+    
+    <!-- Hearts decoration -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="main-text">Blessing, <br>Will You Be My Val?</h1>
+        
+        <div class="buttons">
+            <!-- Yes button with WhatsApp link -->
+            <a href="https://wa.me/09045397755?text=Yes, I will%20💖" target="_blank" class="btn btn-yes">
+                <i class="fas fa-heart"></i> YES
+            </a>
+            
+            <!-- No button with WhatsApp link -->
+            <a href="https://wa.me/09045397755?text=No, I won't" target="_blank" class="btn btn-no">
+                <i class="fas fa-times"></i> NO
+            </a>
+        </div>
+        
+        <p class="footer">
+            Made with ❤️ by Chukwuebuka Francis
+        </p>
+    </div>
+
+    <script>
+        // Generate floating hearts
+        const heartsContainer = document.getElementById('heartsContainer');
+        const heartCount = 25;
+        
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            
+            // Random position
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            
+            // Random size
+            const size = Math.random() * 20 + 15;
+            heart.style.fontSize = `${size}px`;
+            
+            // Random animation duration
+            const duration = Math.random() * 4 + 4;
+            heart.style.animationDuration = `${duration}s`;
+            
+            heartsContainer.appendChild(heart);
+        }
+        
+        // Add click effects for buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create a ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.7);
+                    transform: scale(0);
+                    animation: ripple-animation 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    top: ${y}px;
+                    left: ${x}px;
+                `;
+                
+                this.appendChild(ripple);
+                
+                // Remove ripple after animation
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+                
+                // For the "Yes" button, add a special effect
+                if (this.classList.contains('btn-yes')) {
+                    // Create floating hearts animation
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => {
+                            const flyingHeart = document.createElement('div');
+                            flyingHeart.innerHTML = '❤';
+                            flyingHeart.style.position = 'fixed';
+                            flyingHeart.style.fontSize = '24px';
+                            flyingHeart.style.color = '#ff4d6d';
+                            flyingHeart.style.zIndex = '1000';
+                            flyingHeart.style.left = `${rect.left + rect.width / 2}px`;
+                            flyingHeart.style.top = `${rect.top + rect.height / 2}px`;
+                            flyingHeart.style.pointerEvents = 'none';
+                            
+                            document.body.appendChild(flyingHeart);
+                            
+                            // Animate the heart flying up
+                            const animation = flyingHeart.animate([
+                                { transform: 'translateY(0) scale(1)', opacity: 1 },
+                                { transform: `translateY(-${Math.random() * 100 + 50}px) translateX(${Math.random() * 80 - 40}px) scale(1.5)`, opacity: 0 }
+                            ], {
+                                duration: 1000 + Math.random() * 500,
+                                easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                            });
+                            
+                            // Remove the heart after animation
+                            animation.onfinish = () => {
+                                flyingHeart.remove();
+                            };
+                        }, i * 100);
+                    }
+                }
+            });
+        });
+        
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
